@@ -37,6 +37,19 @@ export const createNotes = async (title, content, tags = []) => {
   }
 }
 
+export const isValidId = async (id) => {
+  try {
+    const Id = await sql`
+      SELECT id FROM products WHERE id = ${id}
+    `
+    console.log("valid Id:", Id)
+    return Id
+  } catch (error) {
+    console.log("Id not valid")
+    return error.message
+  }
+}
+
 export const getNotes = async () => {
   try {
     const notesList = await sql`
@@ -45,5 +58,32 @@ export const getNotes = async () => {
     return notesList;
   } catch (error) {
     return error.message;
+  }
+}
+
+export const updateNotes = async (id, title, content, tags) => {
+  try {
+    const updated = await sql`
+      UPDATE notes
+      SET title=${title}, content=${content}, tags=${tags}
+      WHERE id=${id}
+      RETURNING *
+    `
+    return updated
+  } catch (error) {
+    console.log("Id not found") 
+    return error.message
+  }
+}
+
+export const deleteNotes = async (id) => {
+  try {
+    const deletedNote = await sql`
+      DELETE FROM notes WHERE id = ${id}
+    `
+    return deletedNote
+  } catch (error) {
+    console.log("Id not found")
+    return error.message
   }
 }
