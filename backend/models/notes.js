@@ -16,7 +16,7 @@ export const createNotesTable = async () => {
     )
     `;
 
-    console.log('table created')
+    console.log('notes table created')
   } catch (error) {
     console.log('error:', error)
     return error.message
