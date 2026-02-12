@@ -1,7 +1,7 @@
 import 'dotenv/config.js';
 import express from "express";
 import { getPgVersion } from "./config/db.js";
-import { createNotes, createNotesTable, deleteNotes, getNotes, isValidId, updateNotes } from './models/notes.js';
+import { createNotes, createNotesTable, deleteNotes, getANote, getNotes, isValidId, updateNotes } from './models/notes.js';
 
 const app = express();
 app.use(express.json());/* allows us to accept json data in the request body (in req.body). Without this
@@ -77,6 +77,24 @@ app.delete('/api/notes/:id', async (req, res) => {
     try {
         await deleteNotes(id);
         return res.status(200).json({success: true, message: 'Notes deleted'});
+    } catch (error) {
+        res.status(500).json({success: false, message: 'Internal server error'});
+        console.log(`Error ${error}`);
+    }
+})
+
+app.get('/api/notes/:id', async(req, res) => {
+    const {id} = req.params;
+    const validId = await isValidId(id)
+    console.log("validId = ", validId)
+
+    if(validId.length === 0){
+        return res.status(404).json({success: false, message: 'Note not found'});
+    }
+    
+    try {
+        const note = await getANote(id);
+        return res.status(200).json({success: true, data: note, message: 'Notes fetched'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
         console.log(`Error ${error}`);

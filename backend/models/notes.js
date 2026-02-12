@@ -42,7 +42,7 @@ export const isValidId = async (id) => {
     const Id = await sql`
       SELECT id FROM notes WHERE id = ${id}
     `
-    console.log("valid Id:", Id)
+    //console.log("valid Id:", Id)
     return Id
   } catch (error) {
     //console.log("Id not valid")
@@ -85,5 +85,16 @@ export const deleteNotes = async (id) => {
   } catch (error) {
     console.log("Id not found")
     return error.message
+  }
+}
+
+export const getANote = async (id) => {
+  try {
+    const note = await sql`
+      SELECT * FROM notes WHERE id = ${id};
+    `;
+    return note;
+  } catch (error) {
+    return error.message;
   }
 }
