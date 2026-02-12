@@ -40,12 +40,12 @@ export const createNotes = async (title, content, tags = []) => {
 export const isValidId = async (id) => {
   try {
     const Id = await sql`
-      SELECT id FROM products WHERE id = ${id}
+      SELECT id FROM notes WHERE id = ${id}
     `
     console.log("valid Id:", Id)
     return Id
   } catch (error) {
-    console.log("Id not valid")
+    //console.log("Id not valid")
     return error.message
   }
 }
