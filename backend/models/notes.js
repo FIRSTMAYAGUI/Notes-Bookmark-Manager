@@ -88,7 +88,7 @@ export const deleteNotes = async (id) => {
   }
 }
 
-export const getANote = async (id) => {
+export const getNote = async (id) => {
   try {
     const note = await sql`
       SELECT * FROM notes WHERE id = ${id};
