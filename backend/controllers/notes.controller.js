@@ -1,4 +1,4 @@
-import { createNotes, deleteNotes, getNotes, getNote, isValidId, updateNotes } from "../models/notes";
+import { createNotes, deleteNotes, getNote, getNotes, isValidId, updateNotes } from "../models/notes.js";
 
 export const createNote = async (req, res) =>{
     const { title, content } =  req.body; //data comming from the frontend
@@ -67,7 +67,7 @@ export const removeNote = async (req, res) => {
     }
 }
 
-export const getNote = async(req, res) => {
+export const getANote = async(req, res) => {
     const {id} = req.params;
     const validId = await isValidId(id)
     console.log("validId = ", validId)

@@ -1,4 +1,4 @@
-import { createBookMarks, deleteBookMark, getBookMarks, getBookMark, isValidId, updateBookMark } from "../models/bookmarks";
+import { createBookMarks, deleteBookMark, getBookMarks, getBookMark, isValidId, updateBookMark } from "../models/bookmarks.js";
 
 
 export const createBookMark = async (req, res) =>{
@@ -66,7 +66,7 @@ export const removeBookMark = async (req, res) => {
     }
 }
 
-export const getBookMark = async(req, res) => {
+export const getABookMark = async(req, res) => {
     const {id} = req.params;
     const validId = await isValidId(id)
     console.log("validId = ", validId)
