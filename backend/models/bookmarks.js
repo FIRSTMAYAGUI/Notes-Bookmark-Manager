@@ -8,7 +8,7 @@ export const createBookmarkTable = async () => {
 
         url TEXT NOT NULL UNIQUE,
         title TEXT NOT NULL,
-        description TEXT,
+        description TEXT DEFAULT NULL,
 
         is_favorite BOOLEAN DEFAULT FALSE,
 
@@ -23,11 +23,11 @@ export const createBookmarkTable = async () => {
   }
 };
 
-export const createBookMarks = async (url, title) => {
+export const createBookMarks = async (url, title, description) => {
   try {
     const createdBookMarks = await sql`
-      INSERT INTO bookmarks (url, title)
-      VALUES (${title}, ${content}) 
+      INSERT INTO bookmarks (url, title, description)
+      VALUES (${url}, ${title}, ${description}) 
       RETURNING *;
     `; //The ::text[] is to make postgre cast the tags as an array
 
@@ -61,11 +61,11 @@ export const getBookMarks = async () => {
   }
 }
 
-export const updateBookMark = async (id, url, title, tags) => {
+export const updateBookMark = async (id, url, title, description) => {
   try {
     const updated = await sql`
       UPDATE bookmarks
-      SET url=${url}, title=${title}, tags=${tags}
+      SET url=${url}, title=${title}, description=${description}
       WHERE id=${id}
       RETURNING *
     `

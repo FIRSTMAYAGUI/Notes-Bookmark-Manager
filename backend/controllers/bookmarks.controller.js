@@ -2,14 +2,14 @@ import { createBookMarks, deleteBookMark, getBookMarks, getBookMark, isValidId, 
 
 
 export const createBookMark = async (req, res) =>{
-    const { title, url } =  req.body; //data comming from the frontend
+    const { title, url, description } =  req.body; //data comming from the frontend
 
     if (!title || !url){
         return res.status(400).json({success: false, message: 'Please fill in all fields'});
     }
 
     try {
-        await createBookMarks(title, url);
+        await createBookMarks(title, url, description);
         const Bookmarks = await getBookMarks();
         return res.status(201).json({success: true, data: Bookmarks, message: 'Bookmarks created successfully'});
     } catch (error) {
@@ -30,7 +30,7 @@ export const getAllBookMarks = async(req, res) => {
 
 export const editBookMark = async (req, res) => {
     const {id} = req.params;
-    const { title, url } = req.body;
+    const { title, url, description} = req.body;
     const validId = await isValidId(id)
     console.log("validId = ", validId)
 
@@ -39,7 +39,7 @@ export const editBookMark = async (req, res) => {
     }
 
     try {
-        const updatedBookmark = await updateBookMark(id, title, url);
+        const updatedBookmark = await updateBookMark(id, title, url, description);
         console.log(updatedBookmark);
         return res.status(200).json({success: true, data: updatedBookmark, message: 'Bookmark updated'});
     } catch (error) {

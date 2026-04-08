@@ -23,4 +23,4 @@ app.listen(APP_PORT, ()=>{
 app.use("/api/notes", notesRoutes);
 
 /* bookmarks routes */
-app.use("/api/notes", bookMarksRoutes);
+app.use("/api/bookmarks", bookMarksRoutes);
