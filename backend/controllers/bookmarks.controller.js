@@ -9,7 +9,7 @@ export const createBookMark = async (req, res) =>{
     }
 
     try {
-        await createBookMarks(title, url, description);
+        await createBookMarks(url, title, description);
         const Bookmarks = await getBookMarks();
         return res.status(201).json({success: true, data: Bookmarks, message: 'Bookmarks created successfully'});
     } catch (error) {
@@ -39,7 +39,7 @@ export const editBookMark = async (req, res) => {
     }
 
     try {
-        const updatedBookmark = await updateBookMark(id, title, url, description);
+        const updatedBookmark = await updateBookMark(id, url, title, description);
         console.log(updatedBookmark);
         return res.status(200).json({success: true, data: updatedBookmark, message: 'Bookmark updated'});
     } catch (error) {
