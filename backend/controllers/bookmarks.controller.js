@@ -1,4 +1,4 @@
-import { createBookMarks, deleteBookMark, getBookMarks, getBookMark, isValidId, updateBookMark } from "../models/bookmarks.js";
+import { deleteBookMark, isValidId, updateBookMark, AddBookMarks, findAllBookMarks, findABookMark } from "../models/bookmarks.js";
 
 
 export const createBookMark = async (req, res) =>{
@@ -8,10 +8,9 @@ export const createBookMark = async (req, res) =>{
         return res.status(400).json({success: false, message: 'Please fill in all fields'});
     }
 
-    try {
-        await createBookMarks(url, title, description);
-        const Bookmarks = await getBookMarks();
-        return res.status(201).json({success: true, data: Bookmarks, message: 'Bookmarks created successfully'});
+    try { 
+        const newBookmarks = await AddBookMarks(url, title, description);
+        return res.status(201).json({success: true, data: newBookmarks, message: 'Bookmarks created successfully'});
     } catch (error) {
         console.error('Error:', error.message);
         return res.status(500).json({success: false, message: 'Internal server Error'});
@@ -20,8 +19,8 @@ export const createBookMark = async (req, res) =>{
 
 export const getAllBookMarks = async(req, res) => {
     try {
-        const Bookmarks = await getBookMarks();
-        return res.status(200).json({success: true, data: Bookmarks, message: 'Bookmarks fetched'});
+        const bookmarks = await findAllBookMarks();
+        return res.status(200).json({success: true, data: bookmarks, message: 'Bookmarks fetched'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
         console.log(`Error ${error}`);
@@ -76,7 +75,7 @@ export const getABookMark = async(req, res) => {
     }
 
     try {
-        const note = await getBookMark(id);
+        const note = await findABookMark(id);
         return res.status(200).json({success: true, data: note, message: 'Bookmark fetched'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});

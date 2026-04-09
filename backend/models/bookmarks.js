@@ -23,7 +23,7 @@ export const createBookmarkTable = async () => {
   }
 };
 
-export const createBookMarks = async (url, title, description) => {
+export const AddBookMarks = async (url, title, description) => {
   try {
     const createdBookMarks = await sql`
       INSERT INTO bookmarks (url, title, description)
@@ -50,7 +50,7 @@ export const isValidId = async (id) => {
   }
 }
 
-export const getBookMarks = async () => {
+export const findAllBookMarks = async () => {
   try {
     const bookMarks = await sql`
       SELECT * FROM bookmarks;
@@ -88,7 +88,7 @@ export const deleteBookMark = async (id) => {
   }
 }
 
-export const getBookMark = async (id) => {
+export const findABookMark = async (id) => {
   try {
     const bookMark = await sql`
       SELECT * FROM bookmarks WHERE id = ${id};

@@ -1,4 +1,4 @@
-import { createNotes, deleteNotes, getNote, getNotes, isValidId, updateNotes } from "../models/notes.js";
+import { AddNotes, deleteNote, findAllNotes, findANote, isValidId, updateNotes } from "../models/notes.js";
 
 export const createNote = async (req, res) =>{
     const { title, content } =  req.body; //data comming from the frontend
@@ -9,8 +9,7 @@ export const createNote = async (req, res) =>{
     }
 
     try {
-        await createNotes(title, content, tags);
-        const notes = await getNotes();
+        const notes = await AddNotes(title, content, tags);
         return res.status(201).json({success: true, data: notes, message: 'Notes created successfully'});
     } catch (error) {
         console.error('Error:', error.message);
@@ -20,7 +19,7 @@ export const createNote = async (req, res) =>{
 
 export const getAllNotes = async(req, res) => {
     try {
-        const notes = await getNotes();
+        const notes = await findAllNotes();
         return res.status(200).json({success: true, data: notes, message: 'Notes fetched'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
@@ -59,7 +58,7 @@ export const removeNote = async (req, res) => {
     }
 
     try {
-        await deleteNotes(id);
+        await deleteNote(id);
         return res.status(200).json({success: true, message: 'Notes deleted'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
@@ -77,7 +76,7 @@ export const getANote = async(req, res) => {
     }
 
     try {
-        const note = await getNote(id);
+        const note = await findANote(id);
         return res.status(200).json({success: true, data: note, message: 'Notes fetched'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});

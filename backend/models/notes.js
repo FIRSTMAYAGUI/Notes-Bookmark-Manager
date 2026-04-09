@@ -23,7 +23,7 @@ export const createNotesTable = async () => {
   }
 }
 
-export const createNotes = async (title, content, tags = []) => {
+export const AddNotes = async (title, content, tags = []) => {
   try {
     const createdNote = await sql`
       INSERT INTO notes (title, content, tags)
@@ -50,7 +50,7 @@ export const isValidId = async (id) => {
   }
 }
 
-export const getNotes = async () => {
+export const findAllNotes = async () => {
   try {
     const notesList = await sql`
       SELECT * FROM notes;
@@ -76,7 +76,7 @@ export const updateNotes = async (id, title, content, tags) => {
   }
 }
 
-export const deleteNotes = async (id) => {
+export const deleteNote = async (id) => {
   try {
     const deletedNote = await sql`
       DELETE FROM notes WHERE id = ${id}
@@ -88,7 +88,7 @@ export const deleteNotes = async (id) => {
   }
 }
 
-export const getNote = async (id) => {
+export const findANote = async (id) => {
   try {
     const note = await sql`
       SELECT * FROM notes WHERE id = ${id};
