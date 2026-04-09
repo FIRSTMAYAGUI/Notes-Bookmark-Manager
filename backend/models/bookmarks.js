@@ -98,3 +98,14 @@ export const findABookMark = async (id) => {
     return error.message;
   }
 }
+
+export const findBookmarkByUrl = async (url) => {
+  try {
+    const bookMarkUrl = await sql`
+      SELECT url FROM bookmarks WHERE url = ${url};
+    `;
+    return bookMarkUrl;
+  } catch (error) {
+    throw error;
+  }
+}

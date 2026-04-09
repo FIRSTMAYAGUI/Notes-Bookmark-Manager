@@ -1,11 +1,26 @@
-import { deleteBookMark, isValidId, updateBookMark, AddBookMarks, findAllBookMarks, findABookMark } from "../models/bookmarks.js";
+import { deleteBookMark, isValidId, updateBookMark, AddBookMarks, findAllBookMarks, findABookMark, findBookmarkByUrl } from "../models/bookmarks.js";
 
 
 export const createBookMark = async (req, res) =>{
-    const { title, url, description } =  req.body; //data comming from the frontend
+    let { title, url, description } =  req.body; //data comming from the frontend
 
-    if (!title || !url){
-        return res.status(400).json({success: false, message: 'Please fill in all fields'});
+    title = title?.trim();
+    url = url?.trim();
+    description = description?.trim();
+
+    if (!title || !url) {
+        return res.status(400).json({ message: "Please fill in all fields" });
+    }
+
+    const existingUrl = await findBookmarkByUrl(url);
+    if (existingUrl.length > 0) {
+        return res.status(409).json({ message: "Bookmark already exists" });
+    }
+
+    try {
+        new URL(url);
+    } catch (err) {
+        return res.status(400).json({ message: "Invalid URL format" });
     }
 
     try { 
@@ -58,7 +73,7 @@ export const removeBookMark = async (req, res) => {
 
     try {
         await deleteBookMark(id);
-        return res.status(200).json({success: true, message: 'Bookmark deleted'});
+        return res.status(204).json({success: true, message: 'Bookmark deleted'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
         console.log(`Error ${error}`);

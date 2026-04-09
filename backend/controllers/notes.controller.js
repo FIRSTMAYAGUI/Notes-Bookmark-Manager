@@ -59,7 +59,7 @@ export const removeNote = async (req, res) => {
 
     try {
         await deleteNote(id);
-        return res.status(200).json({success: true, message: 'Notes deleted'});
+        return res.status(204).json({success: true, message: 'Notes deleted'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
         console.log(`Error ${error}`);
