@@ -12,15 +12,15 @@ export const createBookMark = async (req, res) =>{
         return res.status(400).json({ message: "Please fill in all fields" });
     }
 
-    const existingUrl = await findBookmarkByUrl(url);
-    if (existingUrl.length > 0) {
-        return res.status(409).json({ message: "Bookmark already exists" });
-    }
-
     try {
         new URL(url);
     } catch (err) {
         return res.status(400).json({ message: "Invalid URL format" });
+    }
+
+    const existingUrl = await findBookmarkByUrl(url);
+    if (existingUrl.length > 0) {
+        return res.status(409).json({ message: "Bookmark already exists" });
     }
 
     try { 
@@ -44,7 +44,7 @@ export const getAllBookMarks = async(req, res) => {
 
 export const editBookMark = async (req, res) => {
     const {id} = req.params;
-    const { title, url, description} = req.body;
+    let { title, url, description} = req.body;
     const validId = await isValidId(id)
     console.log("validId = ", validId)
 
@@ -52,8 +52,31 @@ export const editBookMark = async (req, res) => {
         return res.status(404).json({success: false, message: 'Bookmark not found'});
     }
 
+    title = title?.trim();
+    url = url?.trim();
+    description =  description?.trim();
+
+    if (!title || !url) {
+        return res.status(400).json({ message: "Please fill in all fields" });
+    }
+
     try {
-        const updatedBookmark = await updateBookMark(id, url, title, description);
+        new URL(url);
+    } catch (err) {
+        return res.status(400).json({ message: "Invalid URL format" });
+    }
+
+    const existingBookmark = await findABookMark(id);
+    // console.log(existingBookmark[0]);
+    // console.log(existingBookmark[0].title);
+    // return res.status(200).json({ message: existingBookmark[0].title});
+
+    const updatedTitle = title ?? existingBookmark[0].title;
+    const updatedUrl = url ?? existingBookmark[0].url;
+    const updatedDescription = description ?? existingBookmark[0].description;
+
+    try {
+        const updatedBookmark = await updateBookMark(id, updatedUrl, updatedTitle, updatedDescription);
         console.log(updatedBookmark);
         return res.status(200).json({success: true, data: updatedBookmark, message: 'Bookmark updated'});
     } catch (error) {
@@ -90,8 +113,8 @@ export const getABookMark = async(req, res) => {
     }
 
     try {
-        const note = await findABookMark(id);
-        return res.status(200).json({success: true, data: note, message: 'Bookmark fetched'});
+        const bookmark = await findABookMark(id);
+        return res.status(200).json({success: true, data: bookmark, message: 'Bookmark fetched'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
         console.log(`Error ${error}`);
