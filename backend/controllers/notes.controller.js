@@ -29,7 +29,7 @@ export const getAllNotes = async(req, res) => {
 
 export const editNote = async (req, res) => {
     const {id} = req.params;
-    const { title, content } = req.body;
+    let { title, content } = req.body;
     const tags = Array.isArray(req.body.tags) ? req.body.tags : [];
     const validId = await isValidId(id)
     console.log("validId = ", validId)
@@ -38,10 +38,26 @@ export const editNote = async (req, res) => {
         return res.status(404).json({success: false, message: 'Note not found'});
     }
 
+    title= title?.trim();
+    content =  content?.trim();
+
+    if (!title || !content) {
+        return res.status(400).json({ message: "Please fill in all fields" });
+    }
+
+    const existingNote = await findABookMark(id);
+    // console.log(existingNote[0]);
+    // console.log(existingNote[0].title);
+    // return res.status(200).json({ message: existingNote[0].title});
+
+    const updatedTitle = title ?? existingNote[0].title;
+    const updatedContent = content ?? existingNote[0].content;
+    const updatedTags = tags ?? existingNote[0].tags;
+
     try {
-        const updatedNotes = await updateNotes(id, title, content, tags);
-        console.log(updatedNotes);
-        return res.status(200).json({success: true, data: updatedNotes, message: 'Note updated'});
+        const updatedNote = await updateNotes(id, updatedTitle, updatedContent, updatedTags);
+        console.log(updatedNote);
+        return res.status(200).json({success: true, data: updatedNote, message: 'Note updated'});
     } catch (error) {
         res.status(500).json({success: false, message: 'Internal server error'});
         console.log(`Error ${error}`);
