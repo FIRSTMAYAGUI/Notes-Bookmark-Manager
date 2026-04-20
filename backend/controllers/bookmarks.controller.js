@@ -1,4 +1,4 @@
-import { deleteBookMark, isValidId, updateBookMark, AddBookMarks, findAllBookMarks, findABookMark, findBookmarkByUrl } from "../models/bookmarks.js";
+import { deleteBookMark, isIdValid, updateBookMark, AddBookMarks, findAllBookMarks, findABookMark, findBookmarkByUrl } from "../models/bookmarks.js";
 
 
 export const createBookMark = async (req, res) =>{
@@ -45,7 +45,7 @@ export const getAllBookMarks = async(req, res) => {
 export const editBookMark = async (req, res) => {
     const {id} = req.params;
     let { title, url, description} = req.body;
-    const validId = await isValidId(id)
+    const validId = await isIdValid(id)
     console.log("validId = ", validId)
 
     if(validId.length === 0){
@@ -87,7 +87,7 @@ export const editBookMark = async (req, res) => {
 
 export const removeBookMark = async (req, res) => {
     const {id} = req.params;
-    const validId = await isValidId(id)
+    const validId = await isIdValid(id)
     console.log("validId = ", validId)
 
     if(validId.length === 0){
@@ -105,7 +105,7 @@ export const removeBookMark = async (req, res) => {
 
 export const getABookMark = async(req, res) => {
     const {id} = req.params;
-    const validId = await isValidId(id)
+    const validId = await isIdValid(id)
     console.log("validId = ", validId)
 
     if(validId.length === 0){

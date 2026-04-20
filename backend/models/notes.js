@@ -37,7 +37,7 @@ export const AddNotes = async (title, content, tags = []) => {
   }
 }
 
-export const isValidId = async (id) => {
+export const isIdValid = async (id) => {
   try {
     const Id = await sql`
       SELECT id FROM notes WHERE id = ${id}

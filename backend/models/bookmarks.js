@@ -37,7 +37,7 @@ export const AddBookMarks = async (url, title, description) => {
   }
 }
 
-export const isValidId = async (id) => {
+export const isIdValid = async (id) => {
   try {
     const Id = await sql`
       SELECT id FROM bookmarks WHERE id = ${id}

@@ -1,4 +1,4 @@
-import { AddNotes, deleteNote, findAllNotes, findANote, isValidId, updateNotes } from "../models/notes.js";
+import { AddNotes, deleteNote, findAllNotes, findANote, isIdValid, updateNotes } from "../models/notes.js";
 
 export const createNote = async (req, res) =>{
     const { title, content } =  req.body; //data comming from the frontend
@@ -31,7 +31,7 @@ export const editNote = async (req, res) => {
     const {id} = req.params;
     let { title, content } = req.body;
     const tags = Array.isArray(req.body.tags) ? req.body.tags : [];
-    const validId = await isValidId(id)
+    const validId = await isIdValid(id)
     console.log("validId = ", validId)
 
     if(validId.length === 0){
@@ -66,7 +66,7 @@ export const editNote = async (req, res) => {
 
 export const removeNote = async (req, res) => {
     const {id} = req.params;
-    const validId = await isValidId(id)
+    const validId = await isIdValid(id)
     console.log("validId = ", validId)
 
     if(validId.length === 0){
@@ -84,7 +84,7 @@ export const removeNote = async (req, res) => {
 
 export const getANote = async(req, res) => {
     const {id} = req.params;
-    const validId = await isValidId(id)
+    const validId = await isIdValid(id)
     console.log("validId = ", validId)
 
     if(validId.length === 0){
