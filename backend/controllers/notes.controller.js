@@ -29,8 +29,8 @@ export const getAllNotes = async(req, res) => {
 
 export const editNote = async (req, res) => {
     const {id} = req.params;
-    let { title, content } = req.body;
-    const tags = Array.isArray(req.body.tags) ? req.body.tags : [];
+    let { title, content, tags} = req.body;
+    Array.isArray(tags)
     const validId = await isIdValid(id)
     console.log("validId = ", validId)
 
@@ -38,14 +38,14 @@ export const editNote = async (req, res) => {
         return res.status(404).json({success: false, message: 'Note not found'});
     }
 
-    title= title?.trim();
-    content =  content?.trim();
+    title = title?.trim();
+    content = content?.trim();
 
     if (!title || !content) {
         return res.status(400).json({ message: "Please fill in all fields" });
     }
 
-    const existingNote = await findABookMark(id);
+    const existingNote = await findANote(id);
     // console.log(existingNote[0]);
     // console.log(existingNote[0].title);
     // return res.status(200).json({ message: existingNote[0].title});
